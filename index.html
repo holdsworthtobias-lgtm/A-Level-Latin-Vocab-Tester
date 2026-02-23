@@ -1981,6 +1981,13 @@ function submitTyped() {
     btnDaily.addEventListener("click", () => {
       state.isDaily = true;
       try {
+        // ✅ Daily is limited by *calendar day* (local date), not a rolling 24h timer.
+        const di = getDailyInfo();
+        if (di.doneToday) {
+          toast(menuToast, "You've already done today's Daily (10). Come back tomorrow!");
+          return;
+        }
+
         const bank = buildBank();
         // Daily practice: 10 questions, weighted toward due/wrong/difficult
         startTestFrom(bank, false, { countSetting: "10", forceCount: 10 });
